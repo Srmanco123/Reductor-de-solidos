@@ -77,6 +77,51 @@ section h2{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:
 .sub{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink3);margin:16px 0 8px;font-weight:650}
 .sub:first-of-type{margin-top:4px}
 html:not(.nativo) .solo-nat{display:none}
+.solo-zonas{display:none!important}
+.tabs{gap:2px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:3px;margin-left:10px}
+html.nativo .tabs{display:flex}
+.tabs button{border:0;background:none;border-radius:7px;padding:6px 16px;font-weight:600;color:var(--ink2);cursor:pointer}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{background:var(--panel);color:var(--ink);box-shadow:var(--sh)}
+.tabs button:focus-visible,.ar-fila button:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+#archivo{flex:1;min-height:0;display:grid;grid-template-columns:420px 1fr;gap:18px;padding:18px 20px;overflow:auto}
+.ar-col{display:flex;flex-direction:column;gap:18px;min-width:0}
+.ar-caja,.ar-lista{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:16px}
+.ar-caja{display:flex;flex-direction:column;gap:12px}
+.ar-caja h2,.ar-lista h2{margin:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.ar-txt{margin:0;color:var(--ink2)}
+.ar-dir{display:flex;align-items:center;gap:10px}
+.ar-dir span{flex:1;min-width:0;overflow-wrap:anywhere;font-weight:600}
+.ar-dir .btn{width:auto;flex:none}
+.ar-err{margin:0;color:var(--err);font-weight:600}
+.ar-cif{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ar-cif:empty{display:none}
+.ar-cif div{border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.ar-cif small{display:block;color:var(--ink3);font-size:11.5px}
+.ar-cif b{font-size:17px;font-variant-numeric:tabular-nums}
+.ar-cif em{font-style:normal;color:var(--ok);font-weight:700}
+#arProg{display:flex;flex-direction:column;gap:6px}
+#arProg .t{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--ink2)}
+#arProg .barra{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+#arProgBar{height:100%;background:var(--acc);width:0}
+#arProg .btn{width:auto;align-self:flex-start}
+#arRes{display:flex;flex-direction:column;gap:4px;font-size:12.5px}
+#arRes .ok{color:var(--ok)} #arRes .mal{color:var(--err)}
+.ar-nota ul{margin:0;padding-left:18px;color:var(--ink2);display:flex;flex-direction:column;gap:6px}
+.ar-lista{display:flex;flex-direction:column;min-height:0;min-width:0}
+.ar-cab{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.ar-cab h2{flex:1}
+.ar-cab input{border:1px solid var(--line2);background:var(--bg);border-radius:8px;padding:6px 10px;width:240px;max-width:50%}
+.ar-tabla{overflow:auto;min-height:0}
+.ar-fila{display:grid;grid-template-columns:minmax(0,1fr) 92px 92px 120px auto;gap:12px;align-items:center;padding:9px 4px;border-top:1px solid var(--line)}
+.ar-fila.cab{border-top:0;color:var(--ink3);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;padding-top:0}
+.ar-fila .n{min-width:0}
+.ar-fila .n b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ar-fila .n small{display:block;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ar-fila .num{text-align:right;font-variant-numeric:tabular-nums}
+.ar-fila .btn{width:auto}
+.ar-vacio{color:var(--ink3);padding:30px 4px;text-align:center}
+@media (max-width:900px){#archivo{grid-template-columns:1fr}.ar-fila{grid-template-columns:minmax(0,1fr) auto}.ar-fila .num,.ar-fila.cab{display:none}}
 .aj.apagado input[type=range]{opacity:.35}
 .lnk{background:none;border:0;padding:0;color:var(--acc);font:inherit;font-weight:600;cursor:pointer}
 .lnk[hidden]{display:none}
@@ -188,6 +233,7 @@ summary{cursor:pointer;color:var(--ink2);font-size:13px}
 <header>
   <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 13 9 5 9-5" opacity=".7"/><path d="m3 17.5 9 4.5 9-4.5" opacity=".4"/></svg></div>
   <div><h1>Reductor de sólidos</h1><p>.tridb y .dxf → JSON para el visor 3D del LOM, sin internet</p></div>
+  <nav class="tabs solo-nat" id="tabs" role="tablist"><button role="tab" data-tab="red" class="on" aria-selected="true">Reducir</button><button role="tab" data-tab="arch" aria-selected="false">Archivar</button></nav>
   <div class="sp"></div>
   <button class="icon" id="tema" title="Tema claro / oscuro"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></button>
 </header>
@@ -210,11 +256,11 @@ summary{cursor:pointer;color:var(--ink2);font-size:13px}
       <input type="range" id="rCorte" min="0" max="100" step="1">
       <p id="pCorte">Más ancho que esto, el sólido cuenta como cámara. <button class="lnk" id="corteAuto">Volver al automático</button></p></div>
     <h3 class="sub">Topografía</h3>
-    <div class="aj solo-nat"><div class="l"><b><i class="pt d"></i>Cámaras · anchas</b><span class="v" id="vTCam"></span></div>
+    <div class="aj solo-zonas"><div class="l"><b><i class="pt d"></i>Cámaras · anchas</b><span class="v" id="vTCam"></span></div>
       <input type="range" id="rTCam" min="0" step="1"><p class="cl" id="cTCam"></p></div>
-    <div class="aj"><div class="l"><b><i class="pt p solo-nat"></i><span id="lTopo">Desvío máximo</span></b><span class="v" id="vTopo"></span></div>
-      <input type="range" id="rTopo" min="0" step="1"><p class="cl solo-nat" id="cTGal"></p></div>
-    <div class="aj solo-nat"><div class="l"><b>Límite de grosor</b><span class="v" id="vGros"></span></div>
+    <div class="aj"><div class="l"><b><i class="pt p solo-zonas"></i><span id="lTopo">Desvío máximo</span></b><span class="v" id="vTopo"></span></div>
+      <input type="range" id="rTopo" min="0" step="1"><p class="cl solo-zonas" id="cTGal"></p></div>
+    <div class="aj solo-zonas"><div class="l"><b>Límite de grosor</b><span class="v" id="vGros"></span></div>
       <input type="range" id="rGros" min="0" max="100" step="1">
       <p>Más fino que esto, es galería. Se mide el ancho de cada hueco al leer. <button class="lnk" id="grosAuto">Volver al automático</button></p></div>
     <details><summary>Ajustes avanzados</summary>
@@ -222,7 +268,7 @@ summary{cursor:pointer;color:var(--ink2);font-size:13px}
         <label for="minTri">No reducir sólidos con menos de<small>triángulos (solo sólidos)</small></label><input type="number" id="minTri" min="0" step="10">
         <label for="soldar">Soldar vértices a menos de<small>cm · cambiarlo vuelve a leer los ficheros</small></label><input type="number" id="soldar" min="0.1" max="50" step="0.5">
         <label for="paso">Precisión de las coordenadas<small>paso del JSON</small></label>
-        <select id="paso"><option value="0.01">1 cm</option><option value="0.1">1 dm</option><option value="1">1 m</option></select>
+        <select id="paso"><option value="0.001">1 mm</option><option value="0.01">1 cm</option><option value="0.1">1 dm</option><option value="1">1 m</option></select>
         <label for="mem">Memoria para la geometría<small>MB · si se llena, pre-reduce lo leído</small></label><input type="number" id="mem" min="200" max="8000" step="100">
       </div>
     </details>
@@ -246,6 +292,34 @@ summary{cursor:pointer;color:var(--ink2);font-size:13px}
   <div id="cifras"></div>
 </div>
 </main>
+<section id="archivo" hidden>
+  <div class="ar-col">
+    <div class="ar-caja">
+      <h2>Biblioteca de archivado</h2>
+      <p class="ar-txt">Guarda aquí los ficheros antiguos (.duf, .dsf, .dcf, .dxf) para ganar espacio. La biblioteca no repite lo que comparten varios ficheros y lo comprime a fondo; después se restaura cualquiera de ellos.</p>
+      <div class="ar-dir"><span id="arDir">Sin biblioteca elegida</span><button class="btn" id="arElegir">Elegir carpeta…</button></div>
+      <p class="ar-err" id="arErr" hidden></p>
+      <div class="ar-cif" id="arCif"></div>
+      <button class="btn pri" id="arAnade" disabled>Archivar ficheros…</button>
+      <div id="arProg" hidden><div class="t"><span id="arProgTxt"></span><span id="arProgPct"></span></div><div class="barra"><div id="arProgBar"></div></div><button class="btn sm" id="arCancela">Cancelar</button></div>
+      <div id="arRes"></div>
+    </div>
+    <div class="ar-caja ar-nota">
+      <h2>Antes de borrar originales</h2>
+      <ul>
+        <li>El programa <b>nunca borra ni modifica</b> los originales: los borras tú cuando quieras.</li>
+        <li>Cada fichero se <b>verifica</b> al archivarlo, leyéndolo otra vez de la biblioteca.</li>
+        <li>Un <b>.duf restaurado</b> tiene el mismo contenido, pero no es idéntico byte a byte (se vuelve a comprimir). Restaura uno y ábrelo en Deswik antes de borrar nada.</li>
+        <li>No muevas ni borres a mano nada de la carpeta de la biblioteca. Haz copia de seguridad de ella como de cualquier otro dato.</li>
+        <li>Para guardar solo la versión reducida de un plan (sin vuelta atrás), usa la pestaña <b>Reducir</b> y exporta.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="ar-lista">
+    <div class="ar-cab"><h2>Ficheros archivados</h2><input type="search" id="arBusca" placeholder="Buscar por nombre…" aria-label="Buscar por nombre"></div>
+    <div class="ar-tabla" id="arTabla"></div>
+  </div>
+</section>
 <div id="aviso" role="status"></div>
 <!--SCRIPT sql-wasm.b64 | <script type="text/plain" id="wasm64">-->
 <!--SCRIPT sqljs.js | <script>-->
@@ -255,5 +329,6 @@ summary{cursor:pointer;color:var(--ink2);font-size:13px}
 <!--SCRIPT app.js | <script>-->
 <!--SCRIPT nativo.js | <script>-->
 <!--SCRIPT recursos.js | <script>-->
+<!--SCRIPT archivo.js | <script>-->
 </body>
 </html>

@@ -12,7 +12,7 @@ const Nat = (() => {
   const q = o => Object.entries(o || {}).map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
   const url = (api, o) => `/api/${api}?t=${ficha}${o ? '&' + q(o) : ''}`;
   // con tiempo máximo: una respuesta que no llega no puede congelar la pantalla
-  const SIN_LIMITE = { elegir: 1, elegirCarpeta: 1, exporta: 1, malla: 1 };
+  const SIN_LIMITE = { elegir: 1, elegirCarpeta: 1, exporta: 1, malla: 1, archivoElegir: 1 };
   async function api(nombre, o) {
     const ctl = new AbortController();
     const t = SIN_LIMITE[nombre] ? 0 : setTimeout(() => ctl.abort(), 8000);
@@ -265,8 +265,7 @@ const Nat = (() => {
     <button data-t="${F.uid}" data-v="sol" class="${F.tipo === 'sol' ? 'on' : ''}" ${dis}>Sólidos</button><button data-t="${F.uid}" data-v="topo" class="${F.tipo === 'topo' ? 'on' : ''}" ${dis}>Topografía</button></div>
     <label class="f-mina">Mina <input data-m="${F.uid}" value="${esc(F.mina)}" maxlength="10" spellcheck="false" ${dis}></label></div>
     ${F.capas && !proc ? capasHTML(F) : ''}
-    ${F.tipo === 'topo' ? `<div class="f-op"><div class="seg sm" role="group" aria-label="Modo" title="Rápido: sin medir la distancia real (en terrenos el desvío suele quedar muy por debajo del límite). Máxima calidad: mide la distancia real y garantiza el límite.">
-      <button data-mo="${F.uid}" data-v="rapido" class="${F.modo === 'rapido' ? 'on' : ''}" ${dis}>Rápido</button><button data-mo="${F.uid}" data-v="calidad" class="${F.modo === 'calidad' ? 'on' : ''}" ${dis}>Máxima calidad</button></div></div>` : ''}` : ''}`;
+` : ''}`;
   }
   function pintaFicherosN() {
     const L = $('#ficheros');
@@ -302,6 +301,7 @@ const Nat = (() => {
       <div class="s-num"><span><small>Triángulos</small>${fmtN(g.triOrig)} → <b>${fmtN(e.tri)}</b> <em>−${Math.round(red * 100)} %</em></span>
       <span><small>Tamaño</small><b>${realDe(g) ? fmtMB(realDe(g)) : '≈ ' + fmtMB(e.bytes)}</b></span></div>
       ${lineasClase(g)}
+      ${g.sustituidos ? `<div class="s-pre"><b>${fmtN(g.sustituidos)}</b> ${g.sustituidos === 1 ? 'sólido estaba repetido' : 'sólidos estaban repetidos'} en varios ficheros: ${g.sustituidos === 1 ? 'sale' : 'salen'} solo del más reciente.</div>` : ''}
       ${g.e0 ? `<div class="s-pre">Pre-reducido a <b>${fmtCm(g.e0)}</b> al leer, para caber en memoria${err < g.e0 ? ': no se puede afinar más que eso' : ''}.</div>` : ''}
       ${formatosHTML(g, i)}
       ${carpetaHTML(g, i)}
@@ -416,7 +416,7 @@ const Nat = (() => {
     const gpus = (info.gpus || []).map(x => x.nombre);
     const hayDiscreta = gpus.some(x => /nvidia|geforce|rtx|radeon/i.test(x));
     const usaIntegrada = /intel|uhd|iris/i.test(gpuNav) && hayDiscreta;
-    $('header p').innerHTML = `Motor nativo v${esc(info.version || '')} · ${info.hilos} núcleos · ${fmtMB(info.ramTotal)} de RAM · JSON junto al fichero de origen`;
+    $('header p').innerHTML = `Motor nativo v${esc(info.version || '')} · ${info.hilos} núcleos · ${fmtMB(info.ramTotal)} de RAM · .dxf, .tridb y .duf`;
     if (usaIntegrada) {
       const d = document.createElement('div');
       d.className = 'gpu-aviso';
@@ -428,6 +428,7 @@ const Nat = (() => {
     const mem = clona('#mem');
     mem.max = Math.round(info.ramTotal / 1048576); mem.min = 512; mem.step = 512; mem.value = S.cfg.memMB;
     mem.previousElementSibling && (mem.previousElementSibling.querySelector('small').textContent = `MB · por defecto el 40 % de la RAM libre (${fmtN(Math.round(info.memDef / 1048576))} MB)`);
+    mem.hidden = true; if (mem.previousElementSibling) mem.previousElementSibling.hidden = true;   // el motor no limita la memoria en esta versión
     mem.addEventListener('change', async () => {
       S.cfg.memMB = Math.max(512, Math.round(+mem.value || info.memDef / 1048576)); mem.value = S.cfg.memMB;
       await api('memoria', { mb: S.cfg.memMB }); refresca();
@@ -439,7 +440,7 @@ const Nat = (() => {
     });
     // «Elegir…» de Windows en vez de soltar ficheros
     const drop = clona('#drop');
-    drop.innerHTML = '<b>Elegir ficheros…</b><span>.dxf o .tridb, varios a la vez · se leen directamente del disco, sin límite de tamaño</span>';
+    drop.innerHTML = '<b>Elegir ficheros…</b><span>.dxf, .tridb o .duf, varios a la vez · se leen directamente del disco</span>';
     const elegir = async () => {
       if (drop.classList.contains('ocupado')) return;
       drop.classList.add('ocupado');
@@ -579,8 +580,7 @@ const Nat = (() => {
       try { await navigator.clipboard.writeText(t); aviso('Diagnóstico copiado'); } catch (er) { prompt('Copia el diagnóstico:', t); }
     });
     // topografía en el motor nativo: galerías (estrecho) y cámaras (ancho) por separado
-    S.cfg.errTopo = 0.20; S.cfg.errTopoCam = 2.0;
-    $('#lTopo').textContent = 'Galerías · estrechas';
+    S.cfg.errTopo = 0.20;
     pintaAjustes();
     $('#mem').value = S.cfg.memMB;
     refresca();

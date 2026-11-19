@@ -29,7 +29,7 @@ const S = {
   fuentes: [], grupos: [], vista: 0, modo: 'lado', aristas: true,
   // errSol: sólidos poco densos (galerías) · errDenso: densos (cámaras) · corte: tri/m² entre ambos (0 = automático)
   // errTopo: topografía (en el motor nativo, la parte estrecha: galerías) · errTopoCam: parte ancha (cámaras) · corteTopo: grosor en m (0 = automático)
-  cfg: { errSol: 0.10, errDenso: 0.50, corte: 0, errTopo: 0.50, errTopoCam: 2.0, corteTopo: 0, minTri: 100, soldar: 0.01, paso: 0.1, memMB: MEM_DEF },
+  cfg: { errSol: 0.10, errDenso: 0.50, corte: 0, errTopo: 0.50, errTopoCam: 2.0, corteTopo: 0, minTri: 100, soldar: 0.01, paso: 0.001, memMB: MEM_DEF },
   ocupado: false, cola: [], nivel: 0, uso: 0
 };
 let idFuente = 0;
